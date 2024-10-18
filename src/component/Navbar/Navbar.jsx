@@ -9,7 +9,7 @@ import { WishListContext } from "../../Context/addWishList";
 export default function Navbar() {
   const { token, setToken } = useContext(tokenContext);
   const { numberOfCartItem } = useContext(addCart);
-  const {numberOfWishItems} = useContext(WishListContext)
+  const { numberOfWishItems } = useContext(WishListContext);
   const navigate = useNavigate();
   function logOut() {
     setToken(null);

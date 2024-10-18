@@ -7,7 +7,7 @@ import { addCart } from "../../Context/AddProductToCart";
 import toast from "react-hot-toast";
 import { WishListContext } from "../../Context/addWishList";
 import { Helmet } from "react-helmet";
-import icon from "../../images/freshcart-logo.svg"
+
 
 export default function Products() {
   const { addProductToCart, allProducts } = useContext(addCart);
@@ -51,7 +51,7 @@ export default function Products() {
   }
 
   async function getAllProducts() {
-    return await axios.get("https://ecommerce.routemisr.com/api/v1/products");
+    return await axios.get("https://fakestoreapi.com/products");
   }
 
   const searchItems = (searchValue) => {
@@ -84,15 +84,15 @@ export default function Products() {
     return <Navigate to={"/login"} />;
   }
 
-  const filteredProducts = data.data.data.filter((product) =>
+  const filteredProducts = data.data.filter((product) =>
     product.title.toLowerCase().includes(searchInput.toLowerCase())
   );
 
   return (
     <>
-    <Helmet>
-      <title>Product</title>
-    </Helmet>
+      <Helmet>
+        <title>Product</title>
+      </Helmet>
       <div className="container">
         <div className="my-5">
           <input
@@ -108,12 +108,8 @@ export default function Products() {
               <div className="product">
                 <Link to={`/ProductDetails/${product.id}`}>
                   <div className="">
-                    <img
-                      className="w-100"
-                      src={product.imageCover}
-                      alt="product"
-                    />
-                    <h3 className="text-main h6">{product.category.name}</h3>
+                    <img className="w-100" src={product.image} alt="product" />
+                    <h3 className="text-main h6">{product.category}</h3>
                     <h2 className="h6">
                       {product.title.split(" ").slice(0, 2).join(" ")}
                     </h2>

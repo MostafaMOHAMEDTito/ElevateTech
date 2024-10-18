@@ -40,7 +40,7 @@ export default function ProductDetails() {
 
   const { id } = useParams();
   function getProductDetails() {
-    return axios.get(`https://ecommerce.routemisr.com/api/v1/products/${id}`);
+    return axios.get(`https://fakestoreapi.com/products/${id}`);
   }
   const { isLoading, data, isError } = useQuery(
     `getProductDetails/${id}`,
@@ -69,19 +69,21 @@ export default function ProductDetails() {
     return <Navigate to={"/Products"} />;
   }
 
-  const productData = data.data.data;
+  const productData = data.data;
   return (
     <>
-          <Helmet>
-        <title>{productData.title.split(" ").slice(0, 2).join(" ") + " Product"}</title>
+      <Helmet>
+        <title>
+          {productData.title.split(" ").slice(0, 2).join(" ") + " Product"}
+        </title>
       </Helmet>
       <div className="container">
-        <div className="row">
+        <div className="row pt-3">
           <div className="col-md-4">
             <figure>
               <img
                 className="w-100"
-                src={productData.imageCover}
+                src={productData.image}
                 alt={productData.title}
               />
             </figure>
@@ -90,15 +92,9 @@ export default function ProductDetails() {
             <h1 className=" my-md-3">{productData.title}</h1>
             <h4 className=" my-md-3">{productData.description}</h4>
             <div className="d-flex my-md-3">
-              <h4>{productData.category.name}</h4>
-              <figure>
-                <img
-                  className="w-100"
-                  style={{ height: "50px" }}
-                  src={productData.category.image}
-                  alt={productData.category.name}
-                />
-              </figure>
+              <h4>
+                <p className="h4 fw-bold">Category:{productData.category}</p>
+              </h4>
             </div>
             <div className="my-md-2 d-flex align-items-center">
               <div>

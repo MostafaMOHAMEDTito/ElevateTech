@@ -12,8 +12,9 @@ import { Helmet } from "react-helmet";
 
 export default function Products() {
   const { addProductToCart } = useContext(addCart);
-  const { addToWishList, allWishItems, getWishList } = useContext(WishListContext);
-  
+  const { addToWishList, allWishItems, getWishList } =
+    useContext(WishListContext);
+
   async function addProduct(id) {
     try {
       const res = await addProductToCart(id);
@@ -27,13 +28,13 @@ export default function Products() {
       toast.error("An error occurred while adding the product to cart");
     }
   }
-  
+
   async function addWishList(id) {
     try {
       const res = await addToWishList(id);
       if (res) {
         toast.success(res.message);
-        getWishList(); 
+        getWishList();
       } else {
         toast.error("Failed to add product to wishlist");
       }
@@ -42,9 +43,9 @@ export default function Products() {
       toast.error("An error occurred while adding the product to wishlist");
     }
   }
-  
+
   async function getAllProduct() {
-    return await axios.get("https://ecommerce.routemisr.com/api/v1/products");
+    return await axios.get("https://fakestoreapi.com/products");
   }
 
   const { data, isLoading, isError } = useQuery(
@@ -72,92 +73,95 @@ export default function Products() {
   if (isError) {
     return <Navigate to={"/login"} />;
   }
-  console.log(data);
 
-  return <>
+  return (
+    <>
       <Helmet>
-      <title>Home</title>
-    </Helmet>
-    <div className="container">
-      <div className="row my-3">
-        <div className="col-9">
-          <SimpleSlider />
+        <title>Home</title>
+      </Helmet>
+      <div className="container">
+        <div className="row my-3">
+          <div className="col-md-9">
+            <SimpleSlider />
+          </div>
+          <div className="col-md-3">
+            <figure>
+              <img
+                style={{ height: "150px" }}
+                className="w-100"
+                src={require("../../images/grocery-banner.png")}
+                alt="banner"
+              />
+            </figure>
+            <figure>
+              <img
+                style={{ height: "150px" }}
+                className="w-100"
+                src={require("../../images/grocery-banner-2.jpeg")}
+                alt="banner"
+              />
+            </figure>
+          </div>
         </div>
-        <div className="col-3">
-          <figure>
-            <img
-              style={{ height: "150px" }}
-              className="w-100"
-              src={require("../../images/grocery-banner.png")}
-              alt="banner"
-            />
-          </figure>
-          <figure>
-            <img
-              style={{ height: "150px" }}
-              className="w-100"
-              src={require("../../images/grocery-banner-2.jpeg")}
-              alt="banner"
-            />
-          </figure>
+        <div className="mb-md-4">
+          <CategoriesSlider />
         </div>
-      </div>
-      <CategoriesSlider />
-      <div className="row gy-1">
-        {data.data.data.map((product, index) => (
-          <div key={index} className="col-md-2">
-            <div className="product">
-              <Link to={`/ProductDetails/${product.id}`}>
-                <div>
-                  <img
-                    className="w-100"
-                    src={product.imageCover}
-                    alt="product"
-                  />
-                  <h3 className="text-main h6">{product.category.name}</h3>
-                  <h2 className="h6">
-                    {product.title.split(" ").slice(0, 2).join(" ")}
-                  </h2>
-                  <div className="d-flex justify-content-between">
-                    {product.priceAfterDiscount ? (
-                      <>
+        <div className="row row-cols-2 row-cols-md-3 row-cols-lg-6 gy-3">
+          {data.data.map((product, index) => (
+            <div key={index} className="col">
+              <div className="product p-2 border rounded">
+                <Link to={`/ProductDetails/${product.id}`}>
+                  <div>
+                    <img
+                      className="w-100"
+                      style={{ height: "150px", objectFit: "cover" }}
+                      src={product.image}
+                      alt="product"
+                    />
+                    <h3 className="text-main h6 text-truncate">
+                      {product.category}
+                    </h3>
+                    <h2 className="h6 text-truncate">
+                      {product.title.split(" ").slice(0, 2).join(" ")}
+                    </h2>
+                    <div className="d-flex justify-content-between align-items-center">
+                      {product.priceAfterDiscount ? (
                         <p>
                           <span className="text-decoration-line-through">
-                            {product.price}
-                          </span>
-                          -{product.priceAfterDiscount}
-                          <span>EGP</span>
+                            {product.price} EGP
+                          </span>{" "}
+                          - {product.priceAfterDiscount} EGP
                         </p>
-                      </>
-                    ) : (
-                      <p>
-                        {product.price}
-                        <span>EGP</span>
-                      </p>
-                    )}
-                    <p>⭐{product.ratingsAverage}</p>
+                      ) : (
+                        <p>{product.price} EGP</p>
+                      )}
+                      <p>⭐{product.rating.rate}</p>
+                    </div>
                   </div>
+                </Link>
+                <div className="w-100 text-end">
+                  <i
+                    role="button"
+                    onClick={() => addWishList(product.id)}
+                    className={`fas fa-heart fa-2x ${
+                      allWishItems &&
+                      allWishItems.find((item) => item.id === product.id)
+                        ? "text-danger"
+                        : ""
+                    }`}
+                  ></i>
                 </div>
-              </Link>
-              <div className="w-100 text-end">
-                <i
-                  role="button"
-                  onClick={() => addWishList(product.id)}
-                  className={`fas fa-heart fa-2x ${
-                    allWishItems && allWishItems.find(item => item.id === product.id) ? "text-danger" : ""
-                  }`}
-                ></i>
+                <button
+                  onClick={() => addProduct(product.id)}
+                  className="btn bg-main w-100 mt-2"
+                >
+                  + Add To Cart
+                </button>
               </div>
-              <button
-                onClick={() => addProduct(product.id)}
-                className="btn bg-main w-100"
-              >
-                + Add To Cart
-              </button>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
-    </>;
+    </>
+  );
 }

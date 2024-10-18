@@ -16,7 +16,7 @@ export default function AddProductToCartProvider({ children }) {
   async function getProductFromCart() {
     try {
       await axios
-        .get("https://ecommerce.routemisr.com/api/v1/cart", {
+        .get("https://fakestoreapi.com/carts", {
           headers: { token: localStorage.getItem("tkn") },
         })
         .then((res) => {
