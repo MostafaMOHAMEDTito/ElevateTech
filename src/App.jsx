@@ -22,8 +22,6 @@ import WishList from "./component/WishList/WishList";
 import AddWishListProvider from "./Context/addWishList";
 import { Offline } from "react-detect-offline";
 
-
-
 const myRouter = createBrowserRouter([
   {
     path: "/",
@@ -34,6 +32,14 @@ const myRouter = createBrowserRouter([
       { path: "login", element: <Login /> },
       {
         path: "home",
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "Elevate-Tech",
         element: (
           <ProtectedRoute>
             <Home />
@@ -125,14 +131,16 @@ function App() {
         <AuthContextProvider>
           <AddProductToCartProvider>
             <AddWishListProvider>
-            <RouterProvider router={myRouter} />
+              <RouterProvider router={myRouter} />
             </AddWishListProvider>
           </AddProductToCartProvider>
         </AuthContextProvider>
       </QueryClientProvider>
-      <Toaster/>
+      <Toaster />
       <Offline>
-        <div className="bg-black text-white fixed-bottom fs-6">You're offline right now. Check your connection.</div>
+        <div className="bg-black text-white fixed-bottom fs-6">
+          You're offline right now. Check your connection.
+        </div>
       </Offline>
     </>
   );
